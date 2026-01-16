@@ -108,21 +108,40 @@ STRICT REQUIREMENTS:
 - Include 1 concrete AWS console or CLI example
 - Technical depth: explain the "why", not just the "what"
 
+FORMATTING (CRITICAL):
+- Use bullet points extensively
+- Keep paragraphs to 2-3 sentences MAX
+- Add blank lines between sections for breathing room
+- Use dashes (-) or bullets (•) for lists
+- NO walls of text
+
 STRUCTURE (MANDATORY):
-1. Hook: Start with a specific mistake or confusion people have
-2. Clear explanation: What it is and why it exists
-3. Mental model: How it actually works under the hood
-4. Real-world example: Specific use case with numbers/details
-5. When NOT to use it: Common misconception or wrong use case
-6. TL;DR: 
-   - One key technical insight
-   - One actionable next step
+1. Hook (2-3 sentences): Start with a specific mistake or confusion
+
+2. What it is (bullet points):
+   - Define clearly
+   - Why it exists
+
+3. How it works (bullet points):
+   - Mental model
+   - Key concepts
+
+4. Real example (short paragraph + code/command):
+   - Specific use case with numbers
+   - Include AWS CLI or console example
+
+5. Common mistake (bullet point):
+   - When NOT to use it
+
+6. TL;DR:
+   • One key technical insight
+   • One actionable next step
+
+Day {day_number}/30
 
 Tone: Write like an experienced engineer teaching a junior colleague over coffee.
-Avoid: Tutorial voice, listicles, obvious advice.
+Avoid: Tutorial voice, dense paragraphs, obvious advice.
 Include: Specific details, trade-offs, real constraints.
-
-End with: "Day {day_number}/30"
 """
 
 # ================== GROQ API CALL ==================
@@ -186,11 +205,19 @@ except (KeyError, IndexError) as e:
     exit(1)
 
 # ================== IMAGE URL ==================
-# Extract key AWS service/concept from topic (first 5 words max)
-topic_keywords = ' '.join(topic.split()[:5])
-image_prompt = f"AWS {topic_keywords} architecture diagram, minimal flat design, white background"
-image_url = f"https://image.pollinations.ai/prompt/{image_prompt.replace(' ', '%20')}"
-print(f"Image prompt: {image_prompt}")
+# Using Hugging Face Inference API with FLUX.1-schnell (free tier, good quality)
+# Alternative: Add HF_API_KEY to secrets if you hit rate limits
+
+# Extract key AWS concept for image prompt
+topic_words = topic.split()
+aws_concept = topic_words[0] if len(topic_words) > 0 else "AWS"
+
+# Simple, clean prompt for technical diagrams
+simple_prompt = f"minimal AWS {aws_concept} cloud architecture diagram, clean simple flat design, white background, professional"
+
+# Use pollinations.ai with cleaner prompt (it's actually decent with simple prompts)
+image_url = f"https://image.pollinations.ai/prompt/{simple_prompt.replace(' ', '%20')}?width=1200&height=630&nologo=true&model=flux"
+print(f"Generating image with prompt: {simple_prompt}")
 
 # ================== PUSH TO NOTION ==================
 # Notion rich_text has 2000 char limit per block, split if needed
