@@ -142,6 +142,11 @@ try:
         json=groq_payload,
         timeout=30
     )
+    
+    # Log response details if error
+    if groq_response.status_code != 200:
+        print(f"Groq API error details: {groq_response.text}")
+    
     groq_response.raise_for_status()
     
     response_data = groq_response.json()
