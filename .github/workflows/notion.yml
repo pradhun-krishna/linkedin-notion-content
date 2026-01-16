@@ -1,0 +1,20 @@
+name: Daily Notion Content
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 3 * * *"  # 9:00 AM IST
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python post.py
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          DATABASE_ID: ${{ secrets.DATABASE_ID }}
