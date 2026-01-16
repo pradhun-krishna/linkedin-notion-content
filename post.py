@@ -212,18 +212,14 @@ try:
     
     # Validate content quality
     word_count = len(generated_post.split())
-    if word_count < 250:
-        print(f"Error: Generated post too short ({word_count} words, minimum 250)")
-        exit(1)
     
-    if word_count > 450:
-        print(f"Warning: Generated post is long ({word_count} words)")
+    # Shorter is better for LinkedIn engagement - no minimum
+    if word_count > 500:
+        print(f"Warning: Generated post is quite long ({word_count} words)")
     
-    # Check if required sections are present
-    required_terms = ["TL;DR", f"Day {day_number}/30"]
-    for term in required_terms:
-        if term not in generated_post:
-            print(f"Warning: Generated post missing '{term}'")
+    # Check if Day marker is present
+    if f"Day {day_number}/30" not in generated_post:
+        print(f"Warning: Generated post missing 'Day {day_number}/30'")
     
     print(f"✓ Content generated successfully ({word_count} words)")
     
