@@ -205,19 +205,23 @@ except (KeyError, IndexError) as e:
     exit(1)
 
 # ================== IMAGE URL ==================
-# Using Hugging Face Inference API with FLUX.1-schnell (free tier, good quality)
-# Alternative: Add HF_API_KEY to secrets if you hit rate limits
+# AWS blocks hotlinking their icons, so using simple SVG badges via shields.io
+# Clean, professional, no API needed, always works
 
-# Extract key AWS concept for image prompt
-topic_words = topic.split()
-aws_concept = topic_words[0] if len(topic_words) > 0 else "AWS"
+# Map to relevant AWS service names for badges
+aws_services = [
+    "IAM", "Regions", "IAM", "Security", "AWS", "Free-Tier", "Pricing",
+    "EC2", "EC2", "Lambda", "Lambda", "Auto-Scaling", "ECS", "Fargate",
+    "VPC", "VPC", "Gateway", "Security-Groups", "ELB", "Route53", "CloudFront",
+    "S3", "EBS", "RDS", "DynamoDB", "Backup", "Secrets-Manager",
+    "CloudWatch", "Architecture", "Production"
+]
 
-# Simple, clean prompt for technical diagrams
-simple_prompt = f"minimal AWS {aws_concept} cloud architecture diagram, clean simple flat design, white background, professional"
+service_name = aws_services[existing_posts] if existing_posts < len(aws_services) else "AWS"
 
-# Use pollinations.ai with cleaner prompt (it's actually decent with simple prompts)
-image_url = f"https://image.pollinations.ai/prompt/{simple_prompt.replace(' ', '%20')}?width=1200&height=630&nologo=true&model=flux"
-print(f"Generating image with prompt: {simple_prompt}")
+# Use shields.io for clean, simple badges (always works, no auth needed)
+image_url = f"https://img.shields.io/badge/AWS-{service_name}-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"
+print(f"✓ Using badge for: {service_name}")
 
 # ================== PUSH TO NOTION ==================
 # Notion rich_text has 2000 char limit per block, split if needed
