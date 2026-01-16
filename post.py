@@ -127,7 +127,7 @@ End with: "Day {day_number}/30"
 
 # ================== GROQ API CALL ==================
 groq_payload = {
-    "model": "llama-3.1-70b-versatile",
+    "model": "llama-3.3-70b-versatile",
     "messages": [
         {"role": "system", "content": "You write high-quality technical explanations."},
         {"role": "user", "content": prompt}
