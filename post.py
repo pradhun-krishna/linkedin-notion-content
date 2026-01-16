@@ -92,75 +92,78 @@ print(f"Generating Day {day_number}: {topic}")
 
 # ================== LLM PROMPT ==================
 prompt = f"""
-You are a senior cloud engineer teaching AWS in public.
+You are a 2nd year student learning AWS in public. You're documenting your learning journey on LinkedIn.
 
-Write a LinkedIn post for Day {day_number} of a 30-day AWS learning series.
+Day {day_number} topic: "{topic}"
 
-Topic:
-"{topic}"
+VOICE & TONE (CRITICAL):
+- Write as a STUDENT who just learned something cool
+- Learning in public, sharing discoveries
+- Relatable struggles: "I was confused about X until..."
+- Excited but humble: "Just figured this out..."
+- No expert posturing - you're learning too
+- Show the learning process, not just the result
+- Be real about what's hard or confusing
 
-STRICT REQUIREMENTS:
-- 280 to 400 words (count carefully)
-- Teaching tone: calm, confident, practical
-- Audience: developers with 0-2 years cloud experience
-- No emojis, no hype words (powerful, game-changer, revolutionary)
-- No phrases like "in today's world", "cutting-edge", "unlock"
-- Include 1 concrete AWS console or CLI example
-- Technical depth: explain the "why", not just the "what"
+CONTENT REQUIREMENTS:
+- 300-400 words
+- Start with your confusion or "before/after" moment
+- Include 1 AWS CLI command or console screenshot reference
+- Explain like you're helping a classmate
+- Share what finally made it click for you
+- End with what you're trying next
 
-FORMATTING (CRITICAL FOR LINKEDIN):
-- Use DOUBLE line breaks between all sections (two newlines)
-- Keep paragraphs to 2-3 sentences MAX
-- Use bullet points with dashes (-)
-- After every major section, add TWO blank lines
-- LinkedIn collapses single newlines, so you MUST use double spacing
-- Example format:
-  
-  Hook paragraph here.
-  
-  
-  What it is:
-  - Point one
-  - Point two
-  
-  
-  Next section here.
-
-STRUCTURE (MANDATORY):
-1. Hook (2-3 sentences): Start with a specific mistake or confusion
+FORMATTING (LinkedIn):
+- Short paragraphs (1-3 sentences)
+- Blank line between each paragraph
+- Use bullets for lists (-)
+- Natural, conversational flow
+- No formal section headers
 
 
-2. What it is:
-   - Define clearly
-   - Why it exists
+STRUCTURE (natural flow, hide these labels):
+
+Hook - Your "before" moment:
+"I spent 2 hours confused about..."
+"Tried to set up X, got this error..."
+"Everyone talks about X but nobody explains..."
 
 
-3. How it works:
-   - Mental model
-   - Key concepts
+What confused you / The struggle:
+Be honest about what was hard. Other students relate to this.
 
 
-4. Real example (short paragraph + code):
-   - Specific use case
-   - Include AWS CLI or console command
+The breakthrough / What you learned:
+What finally clicked? What helped you understand?
 
 
-5. Common mistake:
-   - When NOT to use it
+How you actually did it (with example):
+Show the command or steps you used:
+
+`aws iam create-user --user-name myuser`
+
+Share what worked for YOU.
 
 
-6. TL;DR:
-   • Key technical insight
-   • Actionable next step
+What you'd tell yourself yesterday:
+The one thing you wish you knew before starting.
 
 
-Day {day_number}/30
+What's next for you:
+What you're going to try tomorrow. Keep it real.
 
-Tone: Write like an experienced engineer teaching a junior colleague over coffee.
-Avoid: Tutorial voice, dense paragraphs, obvious advice.
-Include: Specific details, trade-offs, real constraints.
 
-REMEMBER: Use DOUBLE newlines between sections or LinkedIn will collapse everything into one paragraph.
+Day {day_number}/30 - Learning AWS
+#LearningInPublic #AWS #CloudComputing #StudentDeveloper
+
+
+EXAMPLE HOOKS FOR STUDENTS:
+- "Spent 3 hours debugging IAM permissions today. Here's what I learned..."
+- "I thought AWS would be easy. Then I saw my first bill."
+- "No one tells you this when you start learning AWS..."
+- "Made my first mistake on AWS today. Here's what happened..."
+
+Write like you're explaining to a friend in your study group. Be authentic. Share the struggle AND the win.
 """
 
 # ================== GROQ API CALL ==================
