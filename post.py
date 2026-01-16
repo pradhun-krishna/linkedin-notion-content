@@ -108,40 +108,59 @@ STRICT REQUIREMENTS:
 - Include 1 concrete AWS console or CLI example
 - Technical depth: explain the "why", not just the "what"
 
-FORMATTING (CRITICAL):
-- Use bullet points extensively
+FORMATTING (CRITICAL FOR LINKEDIN):
+- Use DOUBLE line breaks between all sections (two newlines)
 - Keep paragraphs to 2-3 sentences MAX
-- Add blank lines between sections for breathing room
-- Use dashes (-) or bullets (•) for lists
-- NO walls of text
+- Use bullet points with dashes (-)
+- After every major section, add TWO blank lines
+- LinkedIn collapses single newlines, so you MUST use double spacing
+- Example format:
+  
+  Hook paragraph here.
+  
+  
+  What it is:
+  - Point one
+  - Point two
+  
+  
+  Next section here.
 
 STRUCTURE (MANDATORY):
 1. Hook (2-3 sentences): Start with a specific mistake or confusion
 
-2. What it is (bullet points):
+
+2. What it is:
    - Define clearly
    - Why it exists
 
-3. How it works (bullet points):
+
+3. How it works:
    - Mental model
    - Key concepts
 
-4. Real example (short paragraph + code/command):
-   - Specific use case with numbers
-   - Include AWS CLI or console example
 
-5. Common mistake (bullet point):
+4. Real example (short paragraph + code):
+   - Specific use case
+   - Include AWS CLI or console command
+
+
+5. Common mistake:
    - When NOT to use it
 
+
 6. TL;DR:
-   • One key technical insight
-   • One actionable next step
+   • Key technical insight
+   • Actionable next step
+
 
 Day {day_number}/30
 
 Tone: Write like an experienced engineer teaching a junior colleague over coffee.
 Avoid: Tutorial voice, dense paragraphs, obvious advice.
 Include: Specific details, trade-offs, real constraints.
+
+REMEMBER: Use DOUBLE newlines between sections or LinkedIn will collapse everything into one paragraph.
 """
 
 # ================== GROQ API CALL ==================
