@@ -92,89 +92,75 @@ print(f"Generating Day {day_number}: {topic}")
 
 # ================== LLM PROMPT ==================
 prompt = f"""
-You're a 2nd year CS student who learned AWS BACKWARDS - built first (7 microservices with GPT's help, lots of debugging), THEN got certified. Writing to maximize LinkedIn engagement.
+Write a technical AWS post for Day {day_number} about: "{topic}"
 
-Day {day_number} topic: "{topic}"
+You're a builder who learned AWS by building a 7-microservice system. Mix technical insights with brief context, but vary the storytelling style.
 
-YOUR UNIQUE STORY:
-- Learned by building, not tutorials/YouTube
-- Used ChatGPT + trial-and-error + sleepless nights debugging
-- Built production-ready infra without knowing what you were doing
-- Got AWS/GCP certifications AFTER building (everything clicked easily)
-- This contrarian path is your superpower
+CONTENT (250-350 words):
+- Hook with varied approach (see examples below)
+- Technical insight or non-obvious gotcha
+- Practical AWS CLI command or pattern
+- Why it matters in production
+- Actionable tip
 
-ENGAGEMENT GOALS:
-- Stop the scroll with controversial take
-- Challenge "course first, build later" mentality
-- Share debugging war stories
-- Make people comment/disagree/relate
-- 250-350 words MAX
+STORYTELLING VARIETY (rotate between these):
+1. Technical scenario: "When setting up IAM for microservices..."
+2. Before/after: "I used to do X. Now I do Y. Here's why."
+3. Common mistake: "Most people configure X wrong. Here's what breaks."
+4. Discovery: "Found out Y the hard way. Here's what happened."
+5. Comparison: "X vs Y. Here's which one actually matters."
+6. Myth-busting: "Everyone says X. Reality is Y."
 
-VOICE:
-- "I learned this the hard way..."
-- "No tutorial taught me this..."
-- "Debugged this at 3am..."
-- Builder mindset, not student mindset
-- Real experience > theory
+STYLE:
+- Brief context (1-2 lines max), then straight to tech
+- Show don't tell: "The IAM policy failed" not "I spent hours debugging"
+- Vary the hook style each post
+- Keep storytelling minimal but engaging
+- Focus on the technical lesson
 
-FORMATTING (max engagement):
-- Killer first line (controversial/surprising)
-- 1-2 sentence paragraphs
-- Blank line between EVERY paragraph
-- Maximum white space
-- End with engagement-driving question
+FORMATTING:
+- Short paragraphs
+- Blank line between paragraphs
+- Code blocks for commands
+- Scannable
 
 
 STRUCTURE:
 
-Opening hook (1-2 lines):
-"I didn't watch a single AWS tutorial. Built 7 microservices first."
-"Learned AWS backwards: built first, certified later."
-"Everyone says take courses. I debugged IAM at 3am instead."
-"No YouTube tutorials. Just ChatGPT, errors, and sleepless nights."
+Hook (vary the style):
+Quick context or scenario that sets up the technical point.
+Make it interesting but brief.
 
-The contrarian take:
-Your learning path. Why building first worked.
-The thing you discovered by breaking things.
-
-The real lesson from building:
-What you learned by doing, not reading.
-The mistake you made that taught you.
+The technical insight:
+The core lesson about this AWS service.
+What actually matters in production.
 
 Practical example:
-`aws iam create-role --role-name service-role`
+```
+aws [command] --flag value
+```
+Real code or architecture decision.
 
-What you learned debugging this.
+The gotcha/lesson:
+What breaks. What to watch for.
+Technical detail that matters.
 
-Why it matters:
-How this approach made certifications easy.
-What clicked AFTER hands-on experience.
-
-Question for engagement:
-"Am I crazy for learning this way?"
-"Anyone else skip tutorials and just build?"
-"What's your learning strategy?"
+Actionable tip:
+One thing they can apply today.
 
 Day {day_number}/30
-#AWS #LearnByBuilding #100DaysOfCode #CloudComputing
+#AWS #CloudComputing #DevOps
 
 
-KILLER HOOKS (use this style):
-- "I failed AWS 3 times before watching my first tutorial."
-- "Built 7 microservices without knowing what VPC meant."
-- "Everyone told me: courses first. I deployed to production first."
-- "Debugging IAM at 3am taught me more than any certification."
-- "I learned AWS the dumbest way possible. No regrets."
-- "Spent 8 hours fixing one IAM permission. Worth it."
+VARIED HOOK EXAMPLES (rotate styles):
+- "IAM policies work differently than you'd expect. Here's why."
+- "Migrating 7 services to ECS taught me this about container networking."
+- "Security Groups vs NACLs. Most tutorials explain this wrong."
+- "S3 buckets got expensive fast. Found the issue in CloudWatch logs."
+- "Lambda cold starts: 100ms vs 5s. Here's what causes the difference."
+- "RDS backup strategy: learned this after almost losing data."
 
-TONE:
-- Humble but bold about your approach
-- Share the struggle ("sleepless nights debugging")
-- Show it worked (certifications were easy after)
-- Make it relatable (others can try this too)
-- Controversial but authentic
-
-Write to make people REACT. Your learning path is unique. Own it. Make it controversial. Drive engagement.
+Keep it TECHNICAL but use brief context to make it engaging. Vary the storytelling approach - don't repeat the same narrative pattern.
 """
 
 # ================== GROQ API CALL ==================
