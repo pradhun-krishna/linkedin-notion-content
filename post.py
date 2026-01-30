@@ -224,7 +224,7 @@ try:
     page_url = response_json.get("url")
     page_id = response_json.get("id")
     
-    print(f"✓ Day {day_number} successfully pushed to Notion")
+    print(f"✓ Post successfully pushed to Notion: {topic}")
     print(f"Status: {notion_response.status_code}")
     if page_url:
         print(f"Page URL: {page_url}")
