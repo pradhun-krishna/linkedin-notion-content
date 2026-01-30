@@ -1,4 +1,5 @@
 import os
+import random
 import requests
 from datetime import date
 
@@ -18,159 +19,122 @@ GROQ_HEADERS = {
     "Content-Type": "application/json"
 }
 
-# ================== 30-DAY AWS ROADMAP ==================
-AWS_TOPICS = [
-    # Week 1: AWS Fundamentals
-    "AWS account setup and security best practices from day one",
-    "AWS regions, availability zones, and how to choose the right one",
-    "IAM: users, roles, and policies explained with real examples",
-    "Common IAM security mistakes that expose your AWS account",
-    "AWS shared responsibility model: what you own vs what AWS owns",
-    "AWS Free Tier: what's actually free and the hidden costs",
-    "AWS pricing models: On-Demand, Reserved, Spot explained",
+# ================== CONTENT ENGINE CONFIG ==================
+TOPIC_BANK = {
+    "AWS/Cloud": [
+        "IAM policies that look right but still fail",
+        "VPC route tables: the one line that breaks everything",
+        "Security Groups vs NACLs: what actually blocks traffic",
+        "S3 lifecycle rules that actually save money",
+        "RDS connection limits and why apps crash",
+        "CloudFront cache invalidation gotchas",
+        "ALB health checks: why instances look healthy but aren't",
+        "ECS task networking pitfalls (awsvpc vs bridge)",
+        "Lambda timeouts and hidden cold start causes",
+        "CloudWatch alarms that saved me from silent failures"
+    ],
+    "Microservices/Backend": [
+        "Why I split one service into three (and when not to)",
+        "API gateway rate limits that broke my mobile app",
+        "Idempotency keys: small detail, huge impact",
+        "Retries vs timeouts: the failure mode nobody expects",
+        "Schema migration strategy that didn't break production",
+        "Message queues: when async actually makes things worse"
+    ],
+    "DevOps/Infra": [
+        "CI caching: the 1-line change that cut build time",
+        "Secrets in CI: safer than env vars (if you do this)",
+        "Docker build layers: why your image is huge",
+        "Health checks: what to probe and what NOT to",
+        "Blue/green deploys: the simple way without fancy tools"
+    ],
+    "Tools & Tips": [
+        "3 AWS CLI flags I use every day",
+        "My default CloudWatch dashboard setup",
+        "Naming conventions that keep infra sane",
+        "The one logging mistake that hides real errors",
+        "How I document architecture so future me survives"
+    ]
+}
 
-    # Week 2: Compute Services
-    "What really happens when you launch an EC2 instance",
-    "EC2 instance types: how to pick between T2, M5, C5, R5",
-    "AWS Lambda fundamentals: when serverless makes sense",
-    "Lambda cold starts: why they happen and when they matter",
-    "Auto Scaling Groups: scaling based on actual traffic patterns",
-    "ECS vs EKS vs Fargate: choosing containers on AWS",
-    "EC2 vs Lambda vs Fargate: decision framework",
-
-    # Week 3: Networking
-    "VPC explained from scratch: subnets, CIDR, and isolation",
-    "Public vs private subnets: the routing difference",
-    "Internet Gateway vs NAT Gateway: when to use each",
-    "Security Groups vs NACLs: stateful vs stateless filtering",
-    "Application Load Balancer vs Network Load Balancer",
-    "Route53 basics: DNS routing policies explained",
-    "CloudFront CDN: when caching at the edge matters",
-
-    # Week 4: Storage & Databases
-    "S3 storage classes: Standard vs IA vs Glacier vs Deep Archive",
-    "EBS vs EFS vs S3: choosing the right storage type",
-    "RDS fundamentals: managed databases on AWS",
-    "DynamoDB mental model: when NoSQL beats SQL",
-    "Database backups and point-in-time recovery on AWS",
-    "Secrets Manager vs Parameter Store: storing credentials safely",
-
-    # Week 5: Architecture & Best Practices
-    "CloudWatch: monitoring, alarms, and logs in one place",
-    "Simple 3-tier web app architecture on AWS",
-    "Deploying your first production-ready app on AWS"
+VOICES = [
+    {
+        "name": "The Analyst",
+        "instruction": "Calm and structured. Focus on clarity and trade-offs."
+    },
+    {
+        "name": "The Builder",
+        "instruction": "Hands-on and practical. Focus on what worked in real setups."
+    },
+    {
+        "name": "The Skeptic",
+        "instruction": "Question common advice. Use a respectful contrarian angle."
+    },
+    {
+        "name": "The Debugger",
+        "instruction": "Focused on fixing real issues. Explain the root cause."
+    }
 ]
 
-# ================== FIND NEXT DAY ==================
-try:
-    query = requests.post(
-        f"https://api.notion.com/v1/databases/{DATABASE_ID}/query",
-        headers=NOTION_HEADERS,
-        timeout=10
-    )
-    query.raise_for_status()
-    
-    # Handle pagination (Notion returns max 100 results by default)
-    results = query.json().get("results", [])
-    has_more = query.json().get("has_more", False)
-    
-    if has_more:
-        print("Warning: More than 100 posts exist. Pagination needed.")
-    
-    existing_posts = len(results)
-except requests.exceptions.RequestException as e:
-    print(f"Error querying Notion database: {e}")
-    exit(1)
+STRUCTURES = [
+    "Story: Hook -> Context -> Insight -> Example -> Tip",
+    "List: Hook -> 3 bullets -> Practical tip",
+    "Comparison: A vs B -> When to use -> Tip",
+    "Myth-bust: Common belief -> Reality -> Example -> Tip",
+    "Problem/Solution: Problem -> Fix -> Why it works -> Tip"
+]
 
-if existing_posts >= len(AWS_TOPICS):
-    print(f"All {len(AWS_TOPICS)} AWS posts already generated.")
-    exit(0)
+category = random.choice(list(TOPIC_BANK.keys()))
+topic = random.choice(TOPIC_BANK[category])
+voice = random.choice(VOICES)
+structure = random.choice(STRUCTURES)
 
-topic = AWS_TOPICS[existing_posts]
-day_number = existing_posts + 1
-print(f"Generating Day {day_number}: {topic}")
+print(f"Generating:\n- Category: {category}\n- Topic: {topic}\n- Voice: {voice['name']}\n- Structure: {structure}")
 
 # ================== LLM PROMPT ==================
 prompt = f"""
-Write a technical AWS post for Day {day_number} about: "{topic}"
+Write a technical LinkedIn post about: "{topic}" (Category: {category}).
 
-You're a builder who learned AWS by building a 7-microservice system. Mix technical insights with brief context, but vary the storytelling style.
+VOICE/TONE: {voice['name']} -> {voice['instruction']}
+STRUCTURE: {structure}
 
-CONTENT (250-350 words):
-- Hook with varied approach (see examples below)
-- Technical insight or non-obvious gotcha
-- Practical AWS CLI command or pattern
-- Why it matters in production
-- Actionable tip
+STORYTELLING (light, not personal):
+- Include a short technical scenario (1-2 sentences max)
+- No personal life details or emotions
+- Avoid repetitive phrases like "I was confused" or "spent hours"
+- Keep it professional and focused on the technical lesson
 
-STORYTELLING VARIETY (rotate between these):
-1. Technical scenario: "When setting up IAM for microservices..."
-2. Before/after: "I used to do X. Now I do Y. Here's why."
-3. Common mistake: "Most people configure X wrong. Here's what breaks."
-4. Discovery: "Found out Y the hard way. Here's what happened."
-5. Comparison: "X vs Y. Here's which one actually matters."
-6. Myth-busting: "Everyone says X. Reality is Y."
-
-STYLE:
-- Brief context (1-2 lines max), then straight to tech
-- Show don't tell: "The IAM policy failed" not "I spent hours debugging"
-- Vary the hook style each post
-- Keep storytelling minimal but engaging
-- Focus on the technical lesson
+CONTENT (200-300 words):
+- Hook that feels fresh (varied style)
+- One non-obvious technical insight or gotcha
+- Practical example (CLI command, config snippet, or architecture choice)
+- Why it matters in real systems
+- One actionable tip
 
 FORMATTING:
 - Short paragraphs
 - Blank line between paragraphs
-- Code blocks for commands
-- Scannable
+- Use bullets if listing (max 3)
+- Code block for commands
 
+HOOK IDEAS (rotate styles):
+- Technical scenario: "While configuring X, this broke..."
+- Before/after: "I used to do X. Now I do Y."
+- Common mistake: "Most people get X wrong. Here's why."
+- Discovery: "Found out Y when testing Z."
+- Comparison: "X vs Y. Here's the practical difference."
 
-STRUCTURE:
-
-Hook (vary the style):
-Quick context or scenario that sets up the technical point.
-Make it interesting but brief.
-
-The technical insight:
-The core lesson about this AWS service.
-What actually matters in production.
-
-Practical example:
-```
-aws [command] --flag value
-```
-Real code or architecture decision.
-
-The gotcha/lesson:
-What breaks. What to watch for.
-Technical detail that matters.
-
-Actionable tip:
-One thing they can apply today.
-
-Day {day_number}/30
-#AWS #CloudComputing #DevOps
-
-
-VARIED HOOK EXAMPLES (rotate styles):
-- "IAM policies work differently than you'd expect. Here's why."
-- "Migrating 7 services to ECS taught me this about container networking."
-- "Security Groups vs NACLs. Most tutorials explain this wrong."
-- "S3 buckets got expensive fast. Found the issue in CloudWatch logs."
-- "Lambda cold starts: 100ms vs 5s. Here's what causes the difference."
-- "RDS backup strategy: learned this after almost losing data."
-
-Keep it TECHNICAL but use brief context to make it engaging. Vary the storytelling approach - don't repeat the same narrative pattern.
+Avoid fluff. Keep it technical, readable, and lightly story-driven.
 """
 
 # ================== GROQ API CALL ==================
 groq_payload = {
     "model": "llama-3.3-70b-versatile",
     "messages": [
-        {"role": "system", "content": "You write high-quality technical explanations."},
+        {"role": "system", "content": "You write concise, technical posts for developers. Avoid fluff and personal life details."},
         {"role": "user", "content": prompt}
     ],
-    "temperature": 0.4
+    "temperature": 0.7
 }
 
 try:
@@ -199,13 +163,10 @@ try:
     # Validate content quality
     word_count = len(generated_post.split())
     
-    # Shorter is better for LinkedIn engagement - no minimum
-    if word_count > 500:
-        print(f"Warning: Generated post is quite long ({word_count} words)")
-    
-    # Check if Day marker is present
-    if f"Day {day_number}/30" not in generated_post:
-        print(f"Warning: Generated post missing 'Day {day_number}/30'")
+    if word_count < 150:
+        print(f"Warning: Generated post is short ({word_count} words)")
+    if word_count > 400:
+        print(f"Warning: Generated post is long ({word_count} words)")
     
     print(f"✓ Content generated successfully ({word_count} words)")
     
@@ -220,23 +181,18 @@ except (KeyError, IndexError) as e:
     exit(1)
 
 # ================== IMAGE URL ==================
-# AWS blocks hotlinking their icons, so using simple SVG badges via shields.io
-# Clean, professional, no API needed, always works
+# Use shields.io badges by category for clean, consistent visuals
+badge_colors = {
+    "AWS/Cloud": "232F3E",
+    "Microservices/Backend": "4B7BEC",
+    "DevOps/Infra": "20BF6B",
+    "Tools & Tips": "F39C12"
+}
 
-# Map to relevant AWS service names for badges
-aws_services = [
-    "IAM", "Regions", "IAM", "Security", "AWS", "Free-Tier", "Pricing",
-    "EC2", "EC2", "Lambda", "Lambda", "Auto-Scaling", "ECS", "Fargate",
-    "VPC", "VPC", "Gateway", "Security-Groups", "ELB", "Route53", "CloudFront",
-    "S3", "EBS", "RDS", "DynamoDB", "Backup", "Secrets-Manager",
-    "CloudWatch", "Architecture", "Production"
-]
-
-service_name = aws_services[existing_posts] if existing_posts < len(aws_services) else "AWS"
-
-# Use shields.io for clean, simple badges (always works, no auth needed)
-image_url = f"https://img.shields.io/badge/AWS-{service_name}-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white"
-print(f"✓ Using badge for: {service_name}")
+color = badge_colors.get(category, "4B7BEC")
+sanitized_category = category.replace(" ", "%20").replace("&", "%26").replace("/", "%2F")
+image_url = f"https://img.shields.io/badge/{sanitized_category}-Tech-{color}?style=for-the-badge&logo=github&logoColor=white"
+print(f"✓ Using badge for category: {category}")
 
 # ================== PUSH TO NOTION ==================
 # Notion rich_text has 2000 char limit per block, split if needed
@@ -264,8 +220,16 @@ try:
     )
     notion_response.raise_for_status()
     
+    response_json = notion_response.json()
+    page_url = response_json.get("url")
+    page_id = response_json.get("id")
+    
     print(f"✓ Day {day_number} successfully pushed to Notion")
     print(f"Status: {notion_response.status_code}")
+    if page_url:
+        print(f"Page URL: {page_url}")
+    if page_id:
+        print(f"Page ID: {page_id}")
     
 except requests.exceptions.RequestException as e:
     print(f"Error pushing to Notion: {e}")
